@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TorchFlip | Flip The Torch, Flip The Chart</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050505;color:#fff;font-family:'Space Grotesk',sans-serif;overflow-x:hidden}
+h1,h2{font-family:'Syne',sans-serif}
+:root{--orange:#FF7A00;--gold:#FFB240;--card:rgba(255,255,255,0.06);--border:rgba(255,255,255,0.1)}
+nav{position:fixed;top:0;width:100%;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:18px 5%;background:rgba(5,5,5,0.7);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,122,0,0.15)}
+.btn{padding:12px 22px;border-radius:100px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:0.35s;cursor:pointer;border:none;font-size:14px}
+.btn-orange{background:linear-gradient(90deg,#FF7A00,#FFB240);color:#000;box-shadow:0 8px 30px rgba(255,122,0,0.35)}
+.btn-orange:hover{transform:translateY(-3px) scale(1.02)}
+.btn-glass{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#fff}
+.btn-glass:hover{background:#fff;color:#000}
+.hero{min-height:100vh;padding:130px 5% 60px;display:grid;grid-template-columns:1.15fr 0.85fr;gap:30px;align-items:center;position:relative}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(800px 600px at 70% 20%, rgba(255,122,0,0.18), transparent), radial-gradient(600px 400px at 10% 80%, rgba(255,90,0,0.12), transparent);z-index:-1}
+@media(max-width:980px){.hero{grid-template-columns:1fr;text-align:center}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,122,0,0.12);border:1px solid rgba(255,122,0,0.25);padding:8px 14px;border-radius:100px;font-size:12px;letter-spacing:1.2px;font-family:'JetBrains Mono'}
+.h1{font-size:clamp(44px,6.5vw,86px);line-height:0.88;letter-spacing:-2.5px;margin:22px 0}
+.h1 i{font-style:normal;background:linear-gradient(95deg,#FF7A00 0%, #FFB240 50%, #FFE3A0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{color:rgba(255,255,255,0.58);font-size:18px;line-height:1.6;max-width:520px;margin-bottom:30px}
+.ca-card{background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));border:1px solid rgba(255,122,0,0.22);border-radius:20px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;max-width:560px;box-shadow:0 10px 40px rgba(0,0,0,0.5)}
+.ca-addr{font-family:'JetBrains Mono';font-size:13px;font-weight:600}
+.visual-wrap{position:relative;display:flex;justify-content:center;align-items:center;height:520px}
+.visual-glow{position:absolute;width:420px;height:420px;background:radial-gradient(circle, rgba(255,122,0,0.32) 0%, rgba(255,122,0,0) 70%);border-radius:50%;filter:blur(10px)}
+.logo-main{width:320px;height:320px;object-fit:contain;z-index:2;filter:drop-shadow(0 20px 60px rgba(255,122,0,0.4));animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-18px) rotate(1deg)}}
+.coin-float{position:absolute;top:40px;right:60px;width:98px;height:98px;border-radius:50%;background:linear-gradient(180deg,#FFD27A,#FF8A00);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:42px;color:#000;box-shadow:0 12px 30px rgba(255,122,0,0.55);animation:coinFlip 3s ease-in-out infinite;z-index:3;cursor:pointer}
+@keyframes coinFlip{0%,100%{transform:rotateY(0) translateY(0)}50%{transform:rotateY(180deg) translateY(-10px)}}
+.marquee{background:#FF7A00;color:#000;padding:14px 0;overflow:hidden;white-space:nowrap;font-weight:800;font-family:'Syne';letter-spacing:1px}
+.marquee-inner{display:inline-flex;animation:scroll 22s linear infinite}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.section{padding:80px 5%}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+@media(max-width:800px){.grid3{grid-template-columns:1fr}}
+.card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:28px 24px;transition:0.35s}
+.card:hover{transform:translateY(-6px);border-color:rgba(255,122,0,0.35)}
+.card-icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(180deg, rgba(255,122,0,0.25), rgba(255,122,0,0.05));border:1px solid rgba(255,122,0,0.2);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px}
+.card h3{font-size:18px;margin-bottom:8px}
+.card p{color:rgba(255,255,255,0.55);font-size:14px;line-height:1.6}
+.how{display:grid;grid-template-columns:0.9fr 1.1fr;gap:40px;align-items:center;background:linear-gradient(180deg, rgba(255,122,0,0.06), transparent);border-top:1px solid rgba(255,122,0,0.12);border-bottom:1px solid rgba(255,122,0,0.12)}
+@media(max-width:900px){.how{grid-template-columns:1fr}}
+.step{display:flex;gap:16px;margin-bottom:22px}
+.step-n{width:36px;height:36px;border-radius:100px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;font-size:14px}
+.cta{text-align:center;padding:90px 5%;background:radial-gradient(600px 400px at 50% 0%, rgba(255,122,0,0.22), transparent), #080808;border-top:1px solid rgba(255,122,0,0.12)}
+.cta h2{font-size:clamp(36px,6vw,64px);line-height:0.95;letter-spacing:-2px}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(140px);background:#fff;color:#000;padding:13px 24px;border-radius:100px;font-weight:700;font-size:14px;transition:0.5s;z-index:100}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.footer{padding:40px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;color:rgba(255,255,255,0.4);font-size:12px;font-family:'JetBrains Mono';border-top:1px solid rgba(255,255,255,0.06)}
+</style>
+</head>
+<body>
+<nav>
+<div style="font-weight:800;font-size:20px">🔥 TORCH<span style="color:#FF7A00">FLIP</span></div>
+<div style="display:flex;gap:10px">
+<a href="https://x.com/torch_flip" target="_blank" class="btn btn-glass">𝕏 @torch_flip</a>
+<a href="https://app.torchpad.fun/trade/robinhood/0x9a217bc58Fd3dD05E750c6810E33B4d39a661111" target="_blank" class="btn btn-orange">BUY $TFLIP →</a>
+</div>
+</nav>
+<section class="hero">
+<div>
+<div class="eyebrow">🟢 LIVE ON TORCHPAD • ROBINHOOD POOL</div>
+<h1 class="h1">FLIP THE<br><i>TORCH.</i><br>FLIP THE<br>CHART.</h1>
+<p class="sub">TorchFlip is the first <b style="color:#fff">flip-to-earn</b> culture coin. We don't hold torches, we flip them. Every flip burns, every holder flips.</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px">
+<a href="https://app.torchpad.fun/trade/robinhood/0x9a217bc58Fd3dD05E750c6810E33B4d39a661111" target="_blank" class="btn btn-orange">BUY ON TORCHPAD.FUN 🔥</a>
+<a href="https://x.com/torch_flip" target="_blank" class="btn btn-glass">VIEW ON X</a>
+</div>
+<div class="ca-card">
+<div>
+<div style="font-size:10px;letter-spacing:1.5px;color:rgba(255,255,255,0.45);font-family:'JetBrains Mono'">CONTRACT ADDRESS / TFLIP</div>
+<span class="ca-addr">0x50Ba557d1FDc846F48DA5Ae2B5D51A8ee05Aa245</span>
+</div>
+<button class="btn btn-orange" style="padding:10px 18px;font-size:13px" onclick="copyCA()">COPY</button>
+</div>
+</div>
+<div class="visual-wrap">
+<div class="visual-glow"></div>
+<div style="font-size:260px;z-index:2;filter:drop-shadow(0 20px 60px rgba(255,122,0,0.4));animation:float 5s ease-in-out infinite">🔦</div>
+<div class="coin-float" onclick="copyCA()" title="Click to copy CA">T</div>
+</div>
+</section>
+<div class="marquee"><div class="marquee-inner"><span>$TFLIP</span><span>•</span><span>FLIP THE TORCH</span><span>•</span><span>FLIP THE CHART</span><span>•</span><span>TORCHPAD.FUN</span><span>•</span><span>$TFLIP</span><span>•</span><span>FLIP THE TORCH</span><span>•</span><span>FLIP THE CHART</span><span>•</span></div></div>
+<section class="section">
+<div style="display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:20px">
+<h2 style="font-size:36px;letter-spacing:-1px">WHY $TFLIP HITS</h2>
+<p style="color:rgba(255,255,255,0.5);max-width:380px">Not another torch meme. We flipped the meta.</p>
+</div>
+<div class="grid3">
+<div class="card"><div class="card-icon">🔥</div><h3>100% Degen Culture</h3><p>No VC, no presale. Just torch, flame, and flip. Made for torchpad natives.</p></div>
+<div class="card"><div class="card-icon">🪙</div><h3>0% Tax</h3><p>Trade freely. No bundler games, just pure flips.</p></div>
+<div class="card"><div class="card-icon">⚡</div><h3>Robinhood Powered</h3><p>Live on Robinhood curve via torchpad.fun. Instant trade, instant flip.</p></div>
+</div>
+</section>
+<section class="section how">
+<div>
+<h2 style="font-size:42px;letter-spacing:-1.5px;line-height:0.9">HOW TO<br>FLIP</h2>
+<p style="color:rgba(255,255,255,0.55);margin:18px 0 30px;max-width:380px">3 steps to flip with us.</p>
+<div class="step"><div class="step-n">1</div><div><b>Copy CA</b><br><span style="color:rgba(255,255,255,0.55);font-size:14px">0x50Ba557d1FDc846F48DA5Ae2B5D51A8ee05Aa245</span></div></div>
+<div class="step"><div class="step-n">2</div><div><b>Open TorchPad</b><br><span style="color:rgba(255,255,255,0.55);font-size:14px">Trade link Robinhood pool</span></div></div>
+<div class="step"><div class="step-n">3</div><div><b>Flip & Hold</b><br><span style="color:rgba(255,255,255,0.55);font-size:14px">Buy, flip, post on @torch_flip</span></div></div>
+<a href="https://app.torchpad.fun/trade/robinhood/0x9a217bc58Fd3dD05E750c6810E33B4d39a661111" target="_blank" class="btn btn-orange" style="margin-top:10px">FLIP NOW ON TORCHPAD →</a>
+</div>
+<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:28px;padding:20px;text-align:center">
+<div style="font-size:120px">🔥🪙</div>
+<div style="margin-top:16px;font-weight:700">BANNER 3:1 NO TEXT</div>
+<div style="color:rgba(255,255,255,0.5);font-size:13px;margin-top:6px">Pakai banner flame yang lu udah punya di torchpad.fun</div>
+</div>
+</section>
+<section class="cta">
+<h2>READY TO<br>FLIP THE TORCH?</h2>
+<p style="color:rgba(255,255,255,0.55);margin:18px auto 28px;max-width:460px">Join @torch_flip. First flippers get the flame.</p>
+<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+<a href="https://app.torchpad.fun/trade/robinhood/0x9a217bc58Fd3dD05E750c6810E33B4d39a661111" target="_blank" class="btn btn-orange" style="padding:16px 28px;font-size:16px">BUY $TFLIP ON TORCHPAD</a>
+<a href="https://x.com/torch_flip" target="_blank" class="btn btn-glass" style="padding:16px 28px;font-size:16px">FOLLOW @torch_flip</a>
+</div>
+</section>
+<div class="footer">
+<div>© 2026 TORCHFLIP • 0x50Ba...a245</div>
+<div style="display:flex;gap:20px"><a href="https://x.com/torch_flip" target="_blank" style="color:inherit;text-decoration:none">TWITTER</a><a href="https://app.torchpad.fun/trade/robinhood/0x9a217bc58Fd3dD05E750c6810E33B4d39a661111" target="_blank" style="color:inherit;text-decoration:none">TRADE</a></div>
+</div>
+<div class="toast" id="toast">CA Copied: 0x50Ba...a245 🔥</div>
+<script>
+function copyCA(){
+  const ca="0x50Ba557d1FDc846F48DA5Ae2B5D51A8ee05Aa245";
+  navigator.clipboard.writeText(ca).then(()=>{
+    const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);
+  });
+}
+</script>
+</body>
+</html>
